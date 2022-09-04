@@ -120,10 +120,7 @@ jobs:
             cd frontend
             npm install
             npm audit fix --audit-level=critical
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-
+            
 workflows: 
   default:
     jobs: 
