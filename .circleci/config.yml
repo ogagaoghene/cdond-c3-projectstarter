@@ -197,15 +197,12 @@ jobs:
             ansible --version
       - run:
           name: Configure server
+          working_directory: ./.circleci/ansible
           command: |
             pwd &&
             ls -la
             cat inventory
             ansible-playbook -i inventory.txt configure-server.yaml
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/backend
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
