@@ -208,7 +208,6 @@ jobs:
             - project/backend
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
 
   run-migrations:
     executor: node
