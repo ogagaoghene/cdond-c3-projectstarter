@@ -3,6 +3,17 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.10.1
 
+executors:
+  node:
+    docker:
+      - image: circleci/node:13.8.0
+  python:
+    docker:
+      - image: python:3.9.0-alpine
+  aws:
+    docker:
+      - image: amazon/aws-cli
+
 parameters:
   workflow_id:
     type: string
@@ -171,19 +182,20 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   
   configure-infrastructure:
-    docker:
+    executor: python
       - image: circleci/node:13.8.0
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints:
-            - '3d:15:98:3b:1c:7f:26:7f:bb:23:b1:71:34:a7:57:ae'
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update --no-cache tar gzip ansible aws-cli
+          fingerprints: ['3d:15:98:3b:1c:7f:26:7f:bb:23:b1:71:34:a7:57:ae']
       - attach_workspace:
           at: ~/
+      - run:
+          name: Install dependencies
+          working_directory: ./.circleci/ansible
+          command: |
+            apk add --update ansible
+            ansible --version
       - run:
           name: Configure server
           command: |
@@ -208,10 +220,11 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
   run-migrations:
-    docker:
-      - image: circleci/node:13.8.0
+    executor: node
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -219,10 +232,6 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip -qq awscliv2.zip
             sudo ./aws/install
-      - restore_cache:
-          keys: [backend-build]
-      - attach_workspace:
-          at: ~/
       - run:
           name: Run migrations
           command: |
