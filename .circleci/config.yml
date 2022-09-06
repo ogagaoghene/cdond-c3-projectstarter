@@ -183,7 +183,6 @@ jobs:
   
   configure-infrastructure:
     executor: python
-      - image: circleci/node:13.8.0
     steps:
       - checkout
       - add_ssh_keys:
