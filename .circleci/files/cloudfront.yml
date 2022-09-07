@@ -1,5 +1,9 @@
 Description: >
-  Cloudfront distribution for UdaPeople.
+  aws cloudformation deploy \
+    --template-file cloudfront.yml \
+    --stack-name udapeople-cloudfront \
+    --parameter-overrides WorkflowID=o0esiesi \
+    --profile udapeople
 
 Parameters:
   WorkflowID:
