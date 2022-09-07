@@ -9,17 +9,16 @@
   become: yes
   apt:
     autoremove: yes
-- name: "Install Node.js 13"
-  shell: |
-    # Install Node.js LTS version as our base Node.js version
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-
-    # Use n version manager to use Node.js v13.8.0
-    sudo npm install -g n
-    sudo n 13.8.0
-- name: install pm2 globally # sudo npm install pm2 -g
+- name: install deps # sudo apt install nodejs npm
+  become: yes
+  apt:
+    name: ['nodejs', 'npm']
+    state: latest
+    update_cache: yes
+- name: install pm2 # sudo npm install pm2 -g
+  become: yes
   npm:
     name: pm2
     global: yes
-
+    state: latest
+    production: yes
