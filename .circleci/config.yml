@@ -252,7 +252,7 @@ jobs:
       - install_awscli
       - install_nodejs
       - restore_cache:
-          keys: [frontend-build]\
+          keys: [frontend-build]
       - run:
           name: Install dependencies
           command: |
