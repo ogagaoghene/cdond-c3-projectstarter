@@ -189,8 +189,7 @@ jobs:
       - install_awscli
       - install_ansible
       - add_ssh_keys:
-          fingerprints:
-            - '3d:15:98:3b:1c:7f:26:7f:bb:23:b1:71:34:a7:57:ae'
+          fingerprints: ['3d:15:98:3b:1c:7f:26:7f:bb:23:b1:71:34:a7:57:ae']
       - attach_workspace:
           at: ~/
       - run:
