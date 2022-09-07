@@ -1,3 +1,5 @@
+version: 2.1
+
 orbs:
   slack: circleci/slack@4.10.1
 
@@ -19,7 +21,6 @@ commands:
             name: Install Ansible
             command: |
               python3 -m pip install --user ansible
-commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -36,6 +37,7 @@ commands:
             aws s3 rm s3://udapeople-<<parameters.workflow_id>> --recursive
             aws cloudformation delete-stack \
             --stack-name udapeople-frontend-<<parameters.workflow_id>>
+
 revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
