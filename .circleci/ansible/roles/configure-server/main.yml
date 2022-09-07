@@ -1,3 +1,14 @@
+---
+- name: 'update and upgrade packages.' # sudo apt upgrade
+  become: yes
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400
+- name: remove unneeded deps # sudo apt autoremove
+  become: yes
+  apt:
+    autoremove: yes
 - name: "Install Node.js 13"
   shell: |
     # Install Node.js LTS version as our base Node.js version
@@ -11,3 +22,4 @@
   npm:
     name: pm2
     global: yes
+
