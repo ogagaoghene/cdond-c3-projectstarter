@@ -195,6 +195,7 @@ jobs:
           at: ~/
       - run:
           name: Configure server
+          no_output_timeout: 30m
           command: |
             cd .circleci/ansible
             cat inventory.txt
