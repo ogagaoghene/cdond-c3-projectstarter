@@ -48,20 +48,20 @@ commands:
             aws cloudformation delete-stack \
             --stack-name udapeople-frontend-<<parameters.workflow_id>>
 
-revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      workflow_id:
-        type: string
-    steps:
-      - run:
-          name: Revert migrations
-          when: on_fail
-          command: |
-            cd ~/project/backend
-            npm install
-            npm run build
-            npm run migrations:revert
+  revert-migrations:
+      description: Revert the last migration if successfully run in the current workflow.
+      parameters:
+        workflow_id:
+          type: string
+      steps:
+        - run:
+            name: Revert migrations
+            when: on_fail
+            command: |
+              cd ~/project/backend
+              npm install
+              npm run build
+              npm run migrations:revert
 
 jobs:
   build-frontend:
