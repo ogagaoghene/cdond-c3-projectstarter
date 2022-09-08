@@ -5,51 +5,31 @@
     upgrade: yes
     update_cache: yes
     cache_valid_time: 86400
-- name: "remove stale dependencies"
+- name: remove unneeded deps
   become: yes
   apt:
     autoremove: yes
-- name: "Install Node.js 13"
-  shell: |
-    # Install Node.js LTS version as our base Node.js version
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-
-    # Use n version manager to use Node.js v13.8.0
-    sudo npm install -g n
-    sudo n 13.8.0
-- name: "install pm2"
+- name: install deps
+  become: yes
+  apt:
+    name: ['nodejs', 'npm']
+    state: latest
+    update_cache: yes
+- name: install pm2
   become: yes
   npm:
     name: pm2
     global: yes
     state: latest
     production: yes
-- name: "Create backend app directory"
-  file:
-    path: ~/backend-app
-    state: directory
-- name: "Copy artifact into Instance"
-  become: true
+- name: extract artifact
+  become: yes
   unarchive:
     src: files/artifact.tar.gz
-    dest: ~/backend-app
-- name: "Installing Node Dependencies"
-  shell: |
-    cd ~/backend-app
-    npm i
-- name: "Executing Node app with PM2"
-  shell: |
-    cd ~/backend-app/dist
-    pm2 stop default
-    pm2 start main.js
+    dest: .
 
-  register: execute_node
-
-- name: print message
-  debug:
-    msg: "{{ execute_node.stdout_lines }}"
-- name: "Configure pm2 to start as service"
+- name: start app
+  become: yes
   shell: |
-    sudo su -c "env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu"
-    pm2 save
+    pm2 delete all
+    pm2 start npm -- start
