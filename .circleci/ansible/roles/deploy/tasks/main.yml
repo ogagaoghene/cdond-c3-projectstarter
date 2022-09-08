@@ -5,28 +5,31 @@
     upgrade: yes
     update_cache: yes
     cache_valid_time: 86400
-- name: remove unneeded deps
+- name: "remove stale dependencies"
   become: yes
   apt:
     autoremove: yes
-- name: install deps
-  become: yes
-  apt:
-    name: ['nodejs', 'npm']
-    state: latest
-    update_cache: yes
-- name: install pm2
+- name: "Install Node.js 13"
+  shell: |
+    # Install Node.js LTS version as our base Node.js version
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+
+    # Use n version manager to use Node.js v13.8.0
+    sudo npm install -g n
+    sudo n 13.8.0
+- name: "install pm2"
   become: yes
   npm:
     name: pm2
     global: yes
     state: latest
     production: yes
-- name: Create backend app directory
+- name: "Create backend app directory"
   file:
     path: ~/backend-app
     state: directory
-- name: "Unarchive backend files"
+- name: "Copy artifact into Instances"
   unarchive:
     src: artifact.tar.gz
     dest: ~/backend-app
