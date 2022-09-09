@@ -328,8 +328,7 @@ jobs:
               --output text)
             export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
             echo "${BACKEND_PUBLIC_IP}"
-            echbackend-${CIRCLE_WORKFLOW_ID:0:7}
-            echo "${API_URL}"o 
+            echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok" 
             then 
               exit 0 
