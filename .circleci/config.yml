@@ -324,11 +324,11 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
+            --filters Name=tag:aws:cloudformation:stack-name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text)
             echo ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
-            if curl "${API_URL}/api/status" | grep "ok"; 
+            if curl -v "${API_URL}/api/status" | grep "ok"; 
             then 
               exit 0
             else 
@@ -339,7 +339,7 @@ jobs:
           command: |
             export URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com/#/employees"            
             echo $URL
-            if curl ${URL} | grep "Welcome"; 
+            if curl -s ${URL} | grep "Welcome"; 
             then 
               exit 0; 
             else 
