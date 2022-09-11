@@ -298,6 +298,10 @@ jobs:
           name: Deploy backend
           command: |
             cd backend
+            touch .env
+            export TYPEORM_MIGRATIONS_DIR=./migrations
+            export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+            export TYPEORM_MIGRATIONS=./migrations/*.ts
             npm install
             npm run build
             cd ..
@@ -324,7 +328,7 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters Name=tag:Name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
+            --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text)
             echo ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
