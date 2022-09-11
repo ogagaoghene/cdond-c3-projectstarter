@@ -334,6 +334,8 @@ jobs:
             export BACKEND=$(echo $BACKEND_IP | grep -o '[^ ]*$')
             echo $BACKEND
             export API_URL="http://${BACKEND}:3030"
+            echo "Sleeping for 1 minute"
+            sleep 60
             if curl -v "${API_URL}/api/status" | grep "ok"; 
             then 
               exit 0
