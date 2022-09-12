@@ -325,7 +325,8 @@ jobs:
       # - install_nodejs
       - run:
           name: Install dependencies
-          apk add --update --no-cache tar gzip nodejs npm curl aws-cli
+          command: |
+            apk add --update --no-cache tar gzip nodejs npm curl aws-cli
       - run:
           name: Backend smoke test.
           command: |
