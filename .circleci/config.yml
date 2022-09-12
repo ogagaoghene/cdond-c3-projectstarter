@@ -318,7 +318,7 @@ jobs:
             echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
             echo NODE_ENV=production >> ".env"
-            echo TYPE_HOST=$TYPEORM_HOST >> ".env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
             echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
@@ -357,14 +357,16 @@ jobs:
             --filters Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text)
             echo ${BACKEND_IP}
-            export API_URL="http://${BACKEND_IP}:3030"
+            export BACKEND=$(echo $BACKEND_IP | grep -o '[^ ]*$')
+            echo $BACKEND
+            export API_URL="http://${BACKEND}:3030"
             echo "Sleeping for 1 minute"
             sleep 60
-            if curl --connect-timeout 5 "${API_URL}/api/status" | grep "ok"; 
+            if curl -v "${API_URL}/api/status" | grep "ok"; 
             then 
-              exit 0
+              return 0
             else 
-              exit 1
+              return 1
             fi
       - run:
           name: Frontend smoke test.
@@ -373,9 +375,9 @@ jobs:
             echo $URL
             if curl -s ${URL} | grep "Welcome"; 
             then 
-              exit 0; 
+              return 0; 
             else 
-              exit 1;
+              return 1;
             fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
