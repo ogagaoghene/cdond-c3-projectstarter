@@ -330,8 +330,12 @@ jobs:
       - image: cimg/python:3.10
     steps:
       - checkout
-      - install_awscli
-      - install_nodejs
+      # - install_awscli
+      # - install_nodejs
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update --no-cache curl aws-cli nodejs npm
       - run:
           name: Backend smoke test.
           command: |
