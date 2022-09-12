@@ -324,7 +324,7 @@ jobs:
       # - install_awscli
       # - install_nodejs
       - run:
-          name: Install deps
+          name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip nodejs npm curl aws-cli
       - run:
