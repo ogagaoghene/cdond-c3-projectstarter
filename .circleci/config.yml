@@ -251,7 +251,7 @@ jobs:
           command: |
             if grep -q "has been successfully deployed" ~/project/backend/migrations.txt
             then
-              curl --insecure https://kvdb.io/PmKUY4hoNNpAiWnJeSvgCZ/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+              curl --insecure https://kvdb.io/WcfNu4sVKRSpRDqWRgBexi/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -364,7 +364,7 @@ jobs:
             sleep 60
             if curl -v "${API_URL}/api/status" | grep "ok"; 
             then 
-              exit 1
+              exit 0
             else 
               exit 1
             fi
@@ -375,7 +375,7 @@ jobs:
             echo $URL
             if curl -s ${URL} | grep "Welcome"; 
             then 
-              exit 0; 
+              exit 1; 
             else 
               exit 1;
             fi
