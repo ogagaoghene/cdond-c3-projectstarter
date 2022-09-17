@@ -199,7 +199,7 @@ jobs:
       - install_awscli
       - install_ansible
       - add_ssh_keys:
-          fingerprints: ['3d:15:98:3b:1c:7f:26:7f:bb:23:b1:71:34:a7:57:ae']
+          fingerprints: ['09:e8:70:da:19:5d:31:c5:5a:48:4b:d0:ab:9d:b1:59']
       - attach_workspace:
           at: ~/
       - run:
@@ -303,7 +303,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - add_ssh_keys:
-          fingerprints: ['3d:15:98:3b:1c:7f:26:7f:bb:23:b1:71:34:a7:57:ae']
+          fingerprints: ['09:e8:70:da:19:5d:31:c5:5a:48:4b:d0:ab:9d:b1:59']
       - attach_workspace:
           at: ~/
       - run:
@@ -448,7 +448,10 @@ workflows:
       - scan-frontend:
           requires: [build-frontend]
       - deploy-infrastructure:
-          requires: [build-frontend, build-backend]
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
