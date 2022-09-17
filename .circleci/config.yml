@@ -364,7 +364,7 @@ jobs:
             sleep 60
             if curl -v "${API_URL}/api/status" | grep "ok"; 
             then 
-              exit 0
+              exit 1
             else 
               exit 1
             fi
